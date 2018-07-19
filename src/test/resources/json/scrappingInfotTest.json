@@ -1,0 +1,12 @@
+[
+    {
+    "urlToScrap": "https://www.padmapper.com/apartments/arlington-va",
+    "valueForElementsByClass":"_24vHs _2gvFD",
+    "siteName":"Padmapper"    
+    },
+    {
+    "urlToScrap": "https://hotpads.com/loudoun-county-va/townhomes-for-rent",
+    "valueForElementsByClass":"ListingCard-content-container",
+    "siteName":"Hotpads"    
+    }
+]
