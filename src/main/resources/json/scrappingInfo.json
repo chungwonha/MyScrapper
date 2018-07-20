@@ -18,6 +18,11 @@
     "urlToScrap": "https://www.doorsteps.com/search/herndon-va",
     "valueForElementsByClass":"listing-item__info-container",
     "siteName":"Doorsteps-Herndon-VA"    
+    },
+    {
+    "urlToScrap": "https://www.realtor.com/apartments/Herndon_VA",
+    "valueForElementsByClass":"srp-item-body",
+    "siteName":"Realtor.com-Herndon-VA"    
     }
     
 ]
