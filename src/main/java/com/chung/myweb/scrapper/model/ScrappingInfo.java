@@ -14,7 +14,8 @@ public class ScrappingInfo {
     private String urlToScrap;
     private String valueForElementsByClass;
     private String siteName;
-
+    
+        
     public String getUrlToScrap() {
         return urlToScrap;
     }

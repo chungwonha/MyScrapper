@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and openObj the template in the editor.
  */
 package com.chung.myweb.scrapper;
 
@@ -34,6 +34,9 @@ public class ScrapperController {
     private static final Logger logger = LoggerFactory.getLogger(ScrapperController.class.getName());
     private ScrappingInfo[] scrappigInfos;
     
+    @Autowired            
+    RentalScrapper rentalScrapper;
+    
     @PostConstruct
     public void init() throws IOException {
         logger.debug("init");
@@ -43,10 +46,12 @@ public class ScrapperController {
     @GetMapping("/open")
     public String greetingForm(Model model) {
         logger.debug("greetingForm");
+        Open openObj = new Open();
+        openObj.setScrappigInfos(scrappigInfos);
         
-        model.addAttribute("greeting", new Greeting());
-        model.addAttribute("scrappingInfo",this.scrappigInfos);
-        return "greeting";
+        model.addAttribute("openObj", openObj);
+        //model.addAttribute("scrappingInfo",this.scrappigInfos);
+        return "open";
     }
 
 //    @PostMapping("/greeting")
@@ -55,7 +60,18 @@ public class ScrapperController {
 //    }
 
     @RequestMapping("/start")
-    public String start(@RequestParam("scrapper") String pScrapper) {
+    public String start(@ModelAttribute Open pOpen) {
+        logger.debug(pOpen.getSelectedSite());
+        ScrappingInfo selectedScrapInfo = null;
+        
+        for (ScrappingInfo eachInfo : this.scrappigInfos) {
+            if(eachInfo.getSiteName().equals(pOpen.getSelectedSite())){
+                selectedScrapInfo = eachInfo;
+                break;
+            }
+        }
+        int i = this.rentalScrapper.scrapeAndSave(selectedScrapInfo);
+        logger.debug("updated #: {}",i);
         //Scrapper scrapper = this.scrapperFactory.getScrapper(pScrapper);
         //scrapper.scrapeAndSave("chunghaster@gmail.com");
         return "result";
@@ -69,6 +85,8 @@ public class ScrapperController {
 
             // Convert JSON string from file to Object
             ClassLoader classLoader = getClass().getClassLoader();
+            //TO-DO: seems tths JSON is not picked up when it runs the jar instead sping-boot:run.  
+            //need to do change to something else so that it can run ok always
             File file = new File(classLoader.getResource("json/scrappingInfo.json").getFile());
 
             //ScrappingInfo[] scrappigInfos = mapper.readValue(new File("D:\\myjava\\MyScrapper\\src\\main\\resources\\json\\scrappingInfo.json"), ScrappingInfo[].class);

@@ -4,13 +4,54 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Error</title>
+        
+            <style>
+                table td{
+                    vertical-align:top;
+                    border:solid 1px #888;
+                    padding:10px;
+                }
+
+            </style>
     </head>
     <body>
-        <div>Error</div>
+        <div><h1>My Thymeleaf Error Page</h1>
+            <table>
+                <tr>
+                    <td>Date</td>
+                    <td th:text="${timestamp}"/>
+                </tr>
+                <tr>
+                    <td>Path</td>
+                    <td th:text="${path}"/>
+                </tr>
+                <tr>
+                    <td>Error</td>
+                    <td th:text="${error}"/>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td th:text="${status}"/>
+                </tr>
+                <tr>
+                    <td>Message</td>
+                    <td th:text="${message}"/>
+                </tr>
+                <tr>
+                    <td>Exception</td>
+                    <td th:text="${exception}"/>
+                </tr>
+                <tr>
+                    <td>Trace</td>
+                    <td>
+                        <pre th:text="${trace}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

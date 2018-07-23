@@ -38,10 +38,10 @@ public class RentalScrapper implements Scrapper {
     private String valueForElementsByClass;
     private String website;
     private String dataType = "RENTAL LISTING";
-    
-    @Autowired 
+
+    @Autowired
     ScrapRepository scrapRepository;
-    
+
     @Autowired
     private MyJSoup myJsoup;
 
@@ -60,49 +60,53 @@ public class RentalScrapper implements Scrapper {
     public void setMyJsoup(MyJSoup myJsoup) {
         this.myJsoup = myJsoup;
     }
-    
+
     @Override
-    public int scrapeAndSave(String pUserEmail) {
-        logger.debug("------scrapeAndSave begins-------");    
-        
-        List<Scrap> rentalList = new ArrayList();
-        
-        Elements cardDetailsElement = myJsoup.getElements(url, valueForElementsByClass);
+    public int scrapeAndSave(ScrappingInfo scrappingInfo) {
+        logger.debug("------scrapeAndSave begins-------");
+        if (scrappingInfo != null) {
+            List<Scrap> rentalList = new ArrayList();
 
-        Iterator iter = cardDetailsElement.iterator();
-        logger.debug("cardDetailsElement.size(): {}",cardDetailsElement.size());
-        
-        while (iter.hasNext()) {
+            Elements cardDetailsElement = myJsoup.getElements(scrappingInfo.getUrlToScrap(),
+                    scrappingInfo.getValueForElementsByClass());
 
-            Element e1 = (Element) iter.next();
-            logger.info(e1.text());
-            Scrap scrap = new Scrap();
-            scrap.setData(e1.text());
-            scrap.setSourceSite(this.website);
-            scrap.setDataType(this.dataType);
-            rentalList.add(scrap);
+            Iterator iter = cardDetailsElement.iterator();
+            logger.debug("cardDetailsElement.size(): {}", cardDetailsElement.size());
+
+            while (iter.hasNext()) {
+
+                Element e1 = (Element) iter.next();
+                logger.info(e1.text());
+                Scrap scrap = new Scrap();
+                scrap.setData(e1.text());
+                scrap.setSourceSite(this.website);
+                scrap.setDataType(this.dataType);
+                rentalList.add(scrap);
+            }
+            this.save(rentalList);
+
+            logger.debug("rentalList.size()", rentalList.size());
+
+            return rentalList.size();
+        } else {
+            return 0;
         }
-        this.save(rentalList);
-        
-        logger.debug("rentalList.size()",rentalList.size());
-        
-        return rentalList.size();
     }
 
-    public void save(List<Scrap> pList){
+    public void save(List<Scrap> pList) {
         logger.debug("save begins");
         Iterator iter = pList.iterator();
         while (iter.hasNext()) {
-            
-            Scrap scrap  = (Scrap)iter.next();
-            logger.debug("scrap.id: {}",scrap.getData());
+
+            Scrap scrap = (Scrap) iter.next();
+            logger.debug("scrap.id: {}", scrap.getData());
             this.scrapRepository.save(scrap);
         }
-        
+
         logger.debug("save ends");
 
     }
-    
+
     public String getUrl() {
         return url;
     }
@@ -126,10 +130,9 @@ public class RentalScrapper implements Scrapper {
     public void setWebsite(String website) {
         this.website = website;
     }
-    
 
     public static void main(String[] s) {
-        
+
         RentalScrapper rentalScrapper = new RentalScrapper();
         //rentalScrapper.print();
 //        rentalScrapper.setUrl("https://hotpads.com/loudoun-county-va/townhomes-for-rent");

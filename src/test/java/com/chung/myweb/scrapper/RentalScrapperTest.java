@@ -6,6 +6,7 @@
 package com.chung.myweb.scrapper;
 
 
+import com.chung.myweb.scrapper.model.ScrappingInfo;
 import javax.activation.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,9 +47,10 @@ public class RentalScrapperTest {
     
     @Test
     public void testScrapAndTest(){
-        this.rentalScrapper.setUrl("https://www.padmapper.com/apartments/arlington-va");
-        this.rentalScrapper.setValueForElementsByClass("_24vHs _2gvFD");
-        int i = this.rentalScrapper.scrapeAndSave("chunghaster@gmail.com");
+        ScrappingInfo scrappingInfo = new ScrappingInfo();
+        scrappingInfo.setUrlToScrap("https://www.padmapper.com/apartments/arlington-va");
+        scrappingInfo.setValueForElementsByClass("_24vHs _2gvFD");
+        int i = this.rentalScrapper.scrapeAndSave(scrappingInfo);
         
         assertThat(i).isEqualTo(23);
         

@@ -5,12 +5,16 @@
  */
 package com.chung.myweb.scrapper;
 
+import com.chung.myweb.scrapper.model.ScrappingInfo;
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author Chung
  */
+@Component
 public interface Scrapper {
     
-    public abstract int scrapeAndSave(String pUserEmail);
+    public abstract int scrapeAndSave(ScrappingInfo scrappingInfo);
     
 }
