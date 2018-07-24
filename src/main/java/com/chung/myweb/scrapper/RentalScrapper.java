@@ -79,7 +79,7 @@ public class RentalScrapper implements Scrapper {
                 logger.info(e1.text());
                 Scrap scrap = new Scrap();
                 scrap.setData(e1.text());
-                scrap.setSourceSite(this.website);
+                scrap.setSourceSite(scrappingInfo.getUrlToScrap());
                 scrap.setDataType(this.dataType);
                 rentalList.add(scrap);
             }
@@ -102,7 +102,8 @@ public class RentalScrapper implements Scrapper {
             logger.debug("scrap.id: {}", scrap.getData());
             this.scrapRepository.save(scrap);
         }
-
+        
+        
         logger.debug("save ends");
 
     }

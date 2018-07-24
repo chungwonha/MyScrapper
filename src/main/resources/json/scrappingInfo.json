@@ -21,7 +21,7 @@
     },
     {
     "urlToScrap": "https://www.realtor.com/apartments/Herndon_VA",
-    "valueForElementsByClass":"srp-item-body",
+    "valueForElementsByClass":"price",
     "siteName":"Realtor.com-Herndon-VA"    
     }
     

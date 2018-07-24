@@ -6,6 +6,7 @@
 package com.chung.myweb.scrapper;
 
 import com.chung.myweb.scrapper.model.ScrappingInfo;
+import com.chung.myweb.scrapper.util.ScrapInfoJson;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,12 +87,11 @@ public class ScrapperController {
 
             // Convert JSON string from file to Object
             ClassLoader classLoader = getClass().getClassLoader();
-            //TO-DO: seems tths JSON is not picked up when it runs the jar instead sping-boot:run.  
+            //TO-DO: seems the JSON file is not picked up from resources/json folder when it runs the jar instead sping-boot:run.  
             //need to do change to something else so that it can run ok always
-            File file = new File(classLoader.getResource("json/scrappingInfo.json").getFile());
-
-            //ScrappingInfo[] scrappigInfos = mapper.readValue(new File("D:\\myjava\\MyScrapper\\src\\main\\resources\\json\\scrappingInfo.json"), ScrappingInfo[].class);
-            scrappigInfos = mapper.readValue(file, ScrappingInfo[].class);
+            //File file = new File(classLoader.getResource("json/scrappingInfo.json").getFile());
+            
+            scrappigInfos = mapper.readValue(ScrapInfoJson.scrapInfoJson, ScrappingInfo[].class);
 
             for (ScrappingInfo scrappigInfo:scrappigInfos) {
                  logger.debug(scrappigInfo.getUrlToScrap());
