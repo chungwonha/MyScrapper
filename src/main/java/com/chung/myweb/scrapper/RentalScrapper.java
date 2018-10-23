@@ -85,7 +85,7 @@ public class RentalScrapper implements Scrapper {
             }
             this.save(rentalList);
 
-            logger.debug("rentalList.size()", rentalList.size());
+            logger.debug("rentalList.size()", rentalList.size()+" this is in master branch");
 
             return rentalList.size();
         } else {
