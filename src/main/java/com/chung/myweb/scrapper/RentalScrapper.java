@@ -63,7 +63,7 @@ public class RentalScrapper implements Scrapper {
 
     @Override
     public int scrapeAndSave(ScrappingInfo scrappingInfo) {
-        logger.debug("------scrapeAndSave begins-------");
+        logger.debug("------scrapeAndSave begins this is develop branch-------");
         if (scrappingInfo != null) {
             List<Scrap> rentalList = new ArrayList();
 
