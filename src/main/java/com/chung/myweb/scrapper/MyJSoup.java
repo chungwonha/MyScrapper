@@ -13,4 +13,5 @@ import org.jsoup.select.Elements;
  */
 public interface MyJSoup {
     public abstract Elements getElements(String pUrl, String pValueForElementsByClass);
+    public abstract String getEntirePageHtml(String pUrl);
 }
