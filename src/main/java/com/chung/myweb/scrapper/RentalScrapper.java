@@ -8,11 +8,6 @@ package com.chung.myweb.scrapper;
 import com.chung.myweb.scrapper.entity.Scrap;
 import com.chung.myweb.scrapper.model.ScrappingInfo;
 import com.chung.myweb.scrapper.repository.ScrapRepository;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +18,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,8 +39,10 @@ public class RentalScrapper implements Scrapper {
     ScrapRepository scrapRepository;
 
     @Autowired
+    //@Qualifier("MyJSoupProxy")
     private MyJSoup myJsoup;
 
+    
     public String getDataType() {
         return dataType;
     }
@@ -70,6 +68,7 @@ public class RentalScrapper implements Scrapper {
             Elements cardDetailsElement = myJsoup.getElements(scrappingInfo.getUrlToScrap(),
                     scrappingInfo.getValueForElementsByClass());
 
+//            String s = myJsoup.getEntirePageHtml(scrappingInfo.getUrlToScrap());
             Iterator iter = cardDetailsElement.iterator();
             logger.debug("cardDetailsElement.size(): {}", cardDetailsElement.size());
 
@@ -93,6 +92,33 @@ public class RentalScrapper implements Scrapper {
         }
     }
 
+    @Override
+    public int scrapeAndSaveEntirePage(ScrappingInfo scrappingInfo) {
+         logger.debug("------scrapeAndSave begins-------");
+        if (scrappingInfo != null) {
+                
+
+                String s = myJsoup.getEntirePageHtml(scrappingInfo.getUrlToScrap());
+           
+                Scrap scrap = new Scrap();
+                scrap.setData(s);
+                scrap.setSourceSite(scrappingInfo.getUrlToScrap());
+                scrap.setDataType(this.dataType); 
+                
+//                this.save(scrap);
+                RentalScrapperFileGeneratorConfig rentalScrapperFileGeneratorConfig = new RentalScrapperFileGeneratorConfig();
+                rentalScrapperFileGeneratorConfig.setFileName("testFileName");
+                rentalScrapperFileGeneratorConfig.setFileLocation("c:\\temp\\");
+                
+                FileGenerator fileGenerator = new FileGenerator(rentalScrapperFileGeneratorConfig);
+                
+                fileGenerator.write(scrap);
+                return 1;
+                
+        }
+        return 0;
+    }
+
     public void save(List<Scrap> pList) {
         logger.debug("save begins");
         Iterator iter = pList.iterator();
@@ -102,11 +128,14 @@ public class RentalScrapper implements Scrapper {
             logger.debug("scrap.id: {}", scrap.getData());
             this.scrapRepository.save(scrap);
         }
-        
-        
+
         logger.debug("save ends");
 
     }
+    
+     public void save(Scrap pScrap) {
+         this.scrapRepository.save(pScrap);
+     }
 
     public String getUrl() {
         return url;
@@ -160,4 +189,5 @@ public class RentalScrapper implements Scrapper {
 //        rentalScrapper.setValueForElementsByClass("srp-item-body");//srp-item-price");
 //        rentalScrapper.scrapeAndSave("chunghaster@gmail.com");
     }
+
 }
