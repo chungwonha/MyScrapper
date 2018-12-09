@@ -22,7 +22,7 @@ public class Scrap {
     private Long id;
     private String sourceSite;
     
-    @Column(length = 1000)
+    @Column(length = 4000)
     private String data;
     
     private String dataType;//Rental listing, news, shopping items, etc

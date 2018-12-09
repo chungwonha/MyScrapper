@@ -8,16 +8,8 @@ package com.chung.myweb.scrapper;
 import com.chung.myweb.scrapper.entity.Scrap;
 import com.chung.myweb.scrapper.model.ScrappingInfo;
 import com.chung.myweb.scrapper.repository.ScrapRepository;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import java.io.IOException;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -43,8 +35,10 @@ public class RentalScrapper implements Scrapper {
     ScrapRepository scrapRepository;
 
     @Autowired
+    //@Qualifier("MyJSoupProxy")
     private MyJSoup myJsoup;
 
+    
     public String getDataType() {
         return dataType;
     }
@@ -63,50 +57,63 @@ public class RentalScrapper implements Scrapper {
 
     @Override
     public int scrapeAndSave(ScrappingInfo scrappingInfo) {
-        logger.debug("------scrapeAndSave begins-------");
+        logger.debug("------scrapeAndSave begins this is develop branch-------");
         if (scrappingInfo != null) {
             List<Scrap> rentalList = new ArrayList();
 
             Elements cardDetailsElement = myJsoup.getElements(scrappingInfo.getUrlToScrap(),
-                    scrappingInfo.getValueForElementsByClass());
+                                                              scrappingInfo.getValueForElementsByClass());
+           cardDetailsElement.stream().
+                    forEach((Element el)->{
+                    Scrap scrap = new Scrap();
+                    scrap.setData(el.text());
+                    scrap.setSourceSite(scrappingInfo.getUrlToScrap());
+                    scrap.setDataType(this.dataType);
+                    this.scrapRepository.save(scrap);
+                });
 
-            Iterator iter = cardDetailsElement.iterator();
-            logger.debug("cardDetailsElement.size(): {}", cardDetailsElement.size());
-
-            while (iter.hasNext()) {
-
-                Element e1 = (Element) iter.next();
-                logger.info(e1.text());
-                Scrap scrap = new Scrap();
-                scrap.setData(e1.text());
-                scrap.setSourceSite(scrappingInfo.getUrlToScrap());
-                scrap.setDataType(this.dataType);
-                rentalList.add(scrap);
-            }
-            this.save(rentalList);
-
-            logger.debug("rentalList.size()", rentalList.size()+" this is in master branch");
-
-            return rentalList.size();
+            return cardDetailsElement.toArray().length;
         } else {
             return 0;
         }
     }
 
+    @Override
+    public int scrapeAndSaveEntirePage(ScrappingInfo scrappingInfo) {
+         logger.debug("------scrapeAndSave begins-------");
+        if (scrappingInfo != null) {
+                
+
+                String s = myJsoup.getEntirePageHtml(scrappingInfo.getUrlToScrap());
+           
+                Scrap scrap = new Scrap();
+                scrap.setData(s);
+                scrap.setSourceSite(scrappingInfo.getUrlToScrap());
+                scrap.setDataType(this.dataType); 
+                
+//                this.save(scrap);
+                RentalScrapperFileGeneratorConfig rentalScrapperFileGeneratorConfig = new RentalScrapperFileGeneratorConfig();
+                rentalScrapperFileGeneratorConfig.setFileName("testFileName");
+                rentalScrapperFileGeneratorConfig.setFileLocation("c:\\temp\\");
+                
+                FileGenerator fileGenerator = new FileGenerator(rentalScrapperFileGeneratorConfig);
+                
+                fileGenerator.write(scrap);
+                return 1;
+                
+        }
+        return 0;
+    }
+
     public void save(List<Scrap> pList) {
         logger.debug("save begins");
-        Iterator iter = pList.iterator();
-        while (iter.hasNext()) {
-
-            Scrap scrap = (Scrap) iter.next();
-            logger.debug("scrap.id: {}", scrap.getData());
-            this.scrapRepository.save(scrap);
-        }
-        
-        
+        pList.stream().forEach(scrap->{ this.scrapRepository.save(scrap);});
         logger.debug("save ends");
-
     }
+    
+     public void save(Scrap pScrap) {
+         this.scrapRepository.save(pScrap);
+     }
 
     public String getUrl() {
         return url;
@@ -160,4 +167,5 @@ public class RentalScrapper implements Scrapper {
 //        rentalScrapper.setValueForElementsByClass("srp-item-body");//srp-item-price");
 //        rentalScrapper.scrapeAndSave("chunghaster@gmail.com");
     }
+
 }

@@ -14,7 +14,7 @@ public class ScrapInfoJson {
     public static String scrapInfoJson = "[\n"
             + "    {\n"
             + "    \"urlToScrap\": \"https://www.padmapper.com/apartments/arlington-va\",\n"
-            + "    \"valueForElementsByClass\":\"_24vHs _2gvFD\",\n"
+            + "    \"valueForElementsByClass\":\"_1pjQC _3atlu\",\n"
             + "    \"siteName\":\"Padmapper\"    \n"
             + "    },\n"
             + "    {\n"

@@ -72,10 +72,10 @@ public class ScrapperController {
                 break;
             }
         }
-        int i = this.rentalScrapper.scrapeAndSave(selectedScrapInfo);
+//        int i = this.rentalScrapper.scrapeAndSave(selectedScrapInfo);
+          int i = this.rentalScrapper.scrapeAndSaveEntirePage(selectedScrapInfo);
         logger.debug("updated #: {}",i);
-        //Scrapper scrapper = this.scrapperFactory.getScrapper(pScrapper);
-        //scrapper.scrapeAndSave("chunghaster@gmail.com");
+     
         return "result";
     }
 

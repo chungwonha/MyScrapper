@@ -16,5 +16,6 @@ import org.springframework.stereotype.Component;
 public interface Scrapper {
     
     public abstract int scrapeAndSave(ScrappingInfo scrappingInfo);
+    public abstract int scrapeAndSaveEntirePage(ScrappingInfo scrappingInfo);
     
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Chung
  */
-@Component
+@Component("MyJSoupProxy")
 @Primary
 public class MyJSoupProxy implements MyJSoup{
     private static final Logger logger = LoggerFactory.getLogger(MyJSoupProxy.class.getName());
@@ -36,4 +36,16 @@ public class MyJSoupProxy implements MyJSoup{
         return null;
     }
     
+    @Override
+    public String getEntirePageHtml(String pUrl) {
+        try {
+            Document doc = Jsoup.connect(pUrl).get();
+            String s = doc.html();
+            logger.debug(s);
+            return s;
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        }
+        return null;
+    }
 }

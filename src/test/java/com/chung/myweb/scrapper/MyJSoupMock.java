@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -39,6 +40,11 @@ public class MyJSoupMock implements MyJSoup{
             logger.error(ex.getMessage());
       }
         return null;
+    }
+
+    @Override
+    public String getEntirePageHtml(String pUrl) {
+       return "test";
     }
     
 }

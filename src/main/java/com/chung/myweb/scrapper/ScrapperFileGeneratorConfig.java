@@ -10,6 +10,7 @@ package com.chung.myweb.scrapper;
  * @author Chung
  */
 public interface ScrapperFileGeneratorConfig {
+    
     public String getFileName();
 
     public void setFileName(String fileName);
