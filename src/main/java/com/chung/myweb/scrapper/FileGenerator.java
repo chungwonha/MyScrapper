@@ -49,7 +49,7 @@ public class FileGenerator {
         logger.debug(date);
 
         try {
-            objectMapper.writeValue(new File(this.fileConfig.getFileLocation() + this.fileConfig.getFileName() + date), pListToWrite);
+            objectMapper.writeValue(new File(this.fileConfig.getFileLocation() + this.fileConfig.getFileName() + date+".html"), pListToWrite);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

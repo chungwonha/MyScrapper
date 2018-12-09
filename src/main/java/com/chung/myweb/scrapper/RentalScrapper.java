@@ -8,17 +8,13 @@ package com.chung.myweb.scrapper;
 import com.chung.myweb.scrapper.entity.Scrap;
 import com.chung.myweb.scrapper.model.ScrappingInfo;
 import com.chung.myweb.scrapper.repository.ScrapRepository;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -66,27 +62,17 @@ public class RentalScrapper implements Scrapper {
             List<Scrap> rentalList = new ArrayList();
 
             Elements cardDetailsElement = myJsoup.getElements(scrappingInfo.getUrlToScrap(),
-                    scrappingInfo.getValueForElementsByClass());
+                                                              scrappingInfo.getValueForElementsByClass());
+           cardDetailsElement.stream().
+                    forEach((Element el)->{
+                    Scrap scrap = new Scrap();
+                    scrap.setData(el.text());
+                    scrap.setSourceSite(scrappingInfo.getUrlToScrap());
+                    scrap.setDataType(this.dataType);
+                    this.scrapRepository.save(scrap);
+                });
 
-//            String s = myJsoup.getEntirePageHtml(scrappingInfo.getUrlToScrap());
-            Iterator iter = cardDetailsElement.iterator();
-            logger.debug("cardDetailsElement.size(): {}", cardDetailsElement.size());
-
-            while (iter.hasNext()) {
-
-                Element e1 = (Element) iter.next();
-                logger.info(e1.text());
-                Scrap scrap = new Scrap();
-                scrap.setData(e1.text());
-                scrap.setSourceSite(scrappingInfo.getUrlToScrap());
-                scrap.setDataType(this.dataType);
-                rentalList.add(scrap);
-            }
-            this.save(rentalList);
-
-            logger.debug("rentalList.size()", rentalList.size());
-
-            return rentalList.size();
+            return cardDetailsElement.toArray().length;
         } else {
             return 0;
         }
@@ -121,16 +107,8 @@ public class RentalScrapper implements Scrapper {
 
     public void save(List<Scrap> pList) {
         logger.debug("save begins");
-        Iterator iter = pList.iterator();
-        while (iter.hasNext()) {
-
-            Scrap scrap = (Scrap) iter.next();
-            logger.debug("scrap.id: {}", scrap.getData());
-            this.scrapRepository.save(scrap);
-        }
-
+        pList.stream().forEach(scrap->{ this.scrapRepository.save(scrap);});
         logger.debug("save ends");
-
     }
     
      public void save(Scrap pScrap) {

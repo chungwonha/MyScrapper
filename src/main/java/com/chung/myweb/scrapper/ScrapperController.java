@@ -74,7 +74,6 @@ public class ScrapperController {
         }
 //        int i = this.rentalScrapper.scrapeAndSave(selectedScrapInfo);
           int i = this.rentalScrapper.scrapeAndSaveEntirePage(selectedScrapInfo);
-          
         logger.debug("updated #: {}",i);
      
         return "result";
