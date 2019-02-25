@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
+ * This is a db entity
  * @author Chung
  */
 @Entity
@@ -26,6 +26,7 @@ public class Scrap {
     private String data;
     
     private String dataType;//Rental listing, news, shopping items, etc
+    private String siteName;
 
     public Long getId() {
         return id;
@@ -58,6 +59,12 @@ public class Scrap {
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
-    
-    
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
 }

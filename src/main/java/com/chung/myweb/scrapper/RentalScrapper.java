@@ -90,15 +90,18 @@ public class RentalScrapper implements Scrapper {
                 scrap.setData(s);
                 scrap.setSourceSite(scrappingInfo.getUrlToScrap());
                 scrap.setDataType(this.dataType); 
-                
-//                this.save(scrap);
+                scrap.setSiteName(scrappingInfo.getSiteName());
                 RentalScrapperFileGeneratorConfig rentalScrapperFileGeneratorConfig = new RentalScrapperFileGeneratorConfig();
-                rentalScrapperFileGeneratorConfig.setFileName("testFileName");
+                rentalScrapperFileGeneratorConfig.setFileName(scrappingInfo.getSiteName());
                 rentalScrapperFileGeneratorConfig.setFileLocation("c:\\temp\\");
                 
                 FileGenerator fileGenerator = new FileGenerator(rentalScrapperFileGeneratorConfig);
-                
-                fileGenerator.write(scrap);
+
+                /*TODO:
+                  save the file metadata info to DB
+                 */
+
+                fileGenerator.write(s);
                 return 1;
                 
         }

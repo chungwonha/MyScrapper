@@ -16,6 +16,7 @@
         <form action="#" th:action="@{/scrapper/start}" th:object="${openObj}">
             
             <div class="col-lg-3">
+
                 <select th:field="*{selectedSite}">
                     <option th:each="info : ${openObj.scrappigInfos}"
                             th:value="${info.siteName}"
@@ -23,6 +24,7 @@
                 </select>
             </div>
             <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+            <
         </form>
     </body>
 </html>

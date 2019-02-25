@@ -43,13 +43,13 @@ public class FileGenerator {
 
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        String pattern = "MMMMM_DD_yyyy_HH_mm_ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(new Date());
-        logger.debug(date);
+
+        logger.debug(this.getStringFormatedDate());
 
         try {
-            objectMapper.writeValue(new File(this.fileConfig.getFileLocation() + this.fileConfig.getFileName() + date+".html"), pListToWrite);
+            objectMapper.writeValue(new File(this.fileConfig.getFileLocation() +
+                                                       this.fileConfig.getFileName() +
+                                                        this.getStringFormatedDate()+".html"), pListToWrite);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -64,7 +64,8 @@ public class FileGenerator {
     public void write(String s) {
         BufferedWriter writer;
         try {
-            writer = new BufferedWriter(new FileWriter(this.fileConfig.getFileLocation()+"/"+this.fileConfig.getFileName()));
+            writer = new BufferedWriter(new FileWriter(this.fileConfig.getFileLocation()+"/"+
+                                                                this.fileConfig.getFileName()+this.getStringFormatedDate()+".html"));
             writer.write(s);
 
             writer.close();
@@ -72,5 +73,11 @@ public class FileGenerator {
             java.util.logging.Logger.getLogger(FileGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private String getStringFormatedDate(){
+        String pattern = "MMMMM_DD_yyyy_HH_mm_ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(new Date());
     }
 }
